@@ -12,25 +12,12 @@ import ReactSelect from "react-select/creatable";
 import { Link } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { Tag } from "../App";
-import styles from "../NoteList.module.css";
-
-type NoteProps = {
-  id: string;
-  title: string;
-  tags: Tag[];
-};
+import { NoteCard, NoteProps } from "../components/NoteCard";
+import { EditTagsModal } from "../components/EditTagsModal";
 
 type NoteListProps = {
   availableTags: Tag[];
   notes: NoteProps[];
-  onUpdateTag: (id: string, label: string) => void;
-  onDeleteTag: (id: string) => void;
-};
-
-type EditTagsModalProps = {
-  show: boolean;
-  availableTags: Tag[];
-  handleClose: () => void;
   onUpdateTag: (id: string, label: string) => void;
   onDeleteTag: (id: string) => void;
 };
@@ -130,82 +117,6 @@ export function NoteList({
         handleClose={() => setEditTagsModalIsOpen(false)}
         availableTags={availableTags}
       />
-    </>
-  );
-}
-
-function EditTagsModal({
-  availableTags,
-  handleClose,
-  show,
-  onDeleteTag,
-  onUpdateTag,
-}: EditTagsModalProps) {
-  return (
-    <>
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Edit Tags</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <Stack gap={2}>
-              {availableTags.map((tag) => (
-                <Row key={tag.id}>
-                  <Col>
-                    <Form.Control
-                      type="text"
-                      value={tag.label}
-                      onChange={(e) => onUpdateTag(tag.id, e.target.value)}
-                    />
-                  </Col>
-                  <Col xs="auto">
-                    <Button
-                      variant="outline-danger"
-                      onClick={() => onDeleteTag(tag.id)}
-                    >
-                      &times;
-                    </Button>
-                  </Col>
-                </Row>
-              ))}
-            </Stack>
-          </Form>
-        </Modal.Body>
-      </Modal>
-    </>
-  );
-}
-function NoteCard({ id, title, tags }: NoteProps) {
-  return (
-    <>
-      <Card
-        as={Link}
-        to={`/${id}`}
-        className={`h-100 text-reset text-decoration-none ${styles.card}`}
-      >
-        <Card.Body>
-          <Stack
-            gap={2}
-            className="align-items-center justify-content-center h-100"
-          >
-            <span className="fs-5">{title}</span>
-            {tags.length > 0 && (
-              <Stack
-                gap={1}
-                direction="horizontal"
-                className="justify-content-center flex-wrap"
-              >
-                {tags.map((tag) => (
-                  <Badge className="text-truncate" key={tag.id}>
-                    {tag.label}
-                  </Badge>
-                ))}
-              </Stack>
-            )}
-          </Stack>
-        </Card.Body>
-      </Card>
     </>
   );
 }
